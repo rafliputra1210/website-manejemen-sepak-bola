@@ -2,9 +2,9 @@
 @section('title', 'Catat Transaksi Keuangan')
 
 @section('content')
-<div class="card card-custom bg-white p-4 max-w-xl">
+<div class="card card-custom bg-white p-4 max-w-xl shadow-sm border-0">
     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-        <h5 class="mb-0">Form Input Transaksi Uang Kas</h5>
+        <h5 class="mb-0 font-weight-bold">Form Input Transaksi Uang Kas</h5>
         <a href="{{ route('admin.finances.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a>
     </div>
 
@@ -17,9 +17,9 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label font-weight-bold">Jenis Arus Kas <span class="text-danger">*</span></label>
-                <select name="jenis" class="form-select" required>
-                    <option value="pemasukan">Pemasukan (Uang Masuk)</option>
-                    <option value="pengeluaran">Pengeluaran (Uang Keluar)</option>
+                <select name="jenis" class="form-select font-weight-bold text-primary" required>
+                    <option value="pemasukan">🟢 Pemasukan (Uang Masuk)</option>
+                    <option value="pengeluaran">🔴 Pengeluaran (Uang Keluar)</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -36,7 +36,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label font-weight-bold">Nominal (Rp) <span class="text-danger">*</span></label>
-                <input type="number" name="nominal" class="form-control" required placeholder="Contoh: 150000" min="0">
+                <input type="number" name="nominal" class="form-control font-weight-bold" required placeholder="Contoh: 150000" min="0">
             </div>
             <div class="col-md-12">
                 <label class="form-label font-weight-bold">Keterangan / Catatan Tambahan</label>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="mt-4 pt-3 border-top d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Simpan & Update Saldo</button>
+            <button type="submit" class="btn btn-primary px-4 font-weight-bold"><i class="bi bi-save me-1"></i> Simpan & Update Saldo</button>
         </div>
     </form>
 </div>

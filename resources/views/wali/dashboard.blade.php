@@ -66,9 +66,12 @@
                 </li>
             </ul>
 
-            <div class="mt-4 pt-3 border-top">
-                <a href="{{ route('wali.raport.absensi', ['child_id' => $athlete->id]) }}" class="btn btn-outline-success btn-sm w-100 font-weight-bold">
-                    <i class="bi bi-graph-up-arrow me-1"></i> Lihat Raport & Absensi Anak
+            <div class="mt-4 pt-3 border-top d-flex gap-2">
+                <a href="{{ route('wali.absensi', ['child_id' => $athlete->id]) }}" class="btn btn-outline-success btn-sm w-50 font-weight-bold">
+                    <i class="bi bi-calendar-check me-1"></i> Absensi
+                </a>
+                <a href="{{ route('wali.raport', ['child_id' => $athlete->id]) }}" class="btn btn-outline-success btn-sm w-50 font-weight-bold">
+                    <i class="bi bi-award-fill me-1"></i> Raport
                 </a>
             </div>
         </div>

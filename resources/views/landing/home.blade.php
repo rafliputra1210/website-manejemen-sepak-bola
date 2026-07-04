@@ -14,6 +14,9 @@
         <a href="{{ route('landing.registration') }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3 rounded-lg text-lg shadow-lg transition transform hover:-translate-y-0.5">
             Gabung Bersama Kami
         </a>
+        <a href="{{ route('login') }}" class="bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 hover:border-white font-bold px-8 py-3.5 rounded-xl text-lg shadow-lg transition transform hover:-translate-y-0.5 backdrop-blur-sm flex items-center justify-center gap-2">
+                <span>🔐</span> Masuk Portal (Admin / Wali)
+        </a>
     </div>
 </div>
 

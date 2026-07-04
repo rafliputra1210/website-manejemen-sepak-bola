@@ -58,10 +58,11 @@
                     </td>
 
                     <td class="text-center">
+                        <a href="{{ route('admin.athletes.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="bi bi-pencil-square"></i></a>
                         <form action="{{ route('admin.athletes.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data siswa ini?');">
-                            <a href="{{ route('admin.athletes.edit', $item->id) }}" class="btn btn-sm btn-outline-warning me-1" title="Edit & Reset Password"><i class="bi bi-pencil-square"></i></a>
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

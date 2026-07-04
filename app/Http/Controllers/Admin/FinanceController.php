@@ -12,9 +12,9 @@ class FinanceController extends Controller
     {
         $finances = Finance::orderBy('tanggal', 'desc')->orderBy('id', 'desc')->paginate(15);
         
-        // Menghitung ringkasan statistik keuangan
-        $totalPemasukan = Finance::where('jenis', '=', 'pemasukan', 'and')->sum('nominal');
-        $totalPengeluaran = Finance::where('jenis', '=', 'pengeluaran', 'and')->sum('nominal');
+        // Kalkulasi Statistik Keuangan
+        $totalPemasukan = Finance::query()->where('jenis', 'pemasukan')->sum('nominal');
+        $totalPengeluaran = Finance::query()->where('jenis', 'pengeluaran')->sum('nominal');
         $saldoSekarang = $totalPemasukan - $totalPengeluaran;
 
         return view('admin.finances.index', compact('finances', 'totalPemasukan', 'totalPengeluaran', 'saldoSekarang'));
@@ -39,7 +39,7 @@ class FinanceController extends Controller
         $transaksiTerakhir = Finance::orderBy('tanggal', 'desc')->orderBy('id', 'desc')->first();
         $saldoSebelumnya = $transaksiTerakhir ? $transaksiTerakhir->saldo_akhir : 0;
 
-        // 2. Kalkulasi saldo akhir baru secara otomatis
+        // 2. Hitung saldo akhir baru secara otomatis
         if ($validated['jenis'] === 'pemasukan') {
             $validated['saldo_akhir'] = $saldoSebelumnya + $validated['nominal'];
         } else {
@@ -48,13 +48,12 @@ class FinanceController extends Controller
 
         Finance::create($validated);
 
-        return redirect()->route('admin.finances.index')->with('success', 'Transaksi berhasil dicatat! Saldo akhir telah diperbarui otomatis.');
+        return redirect()->route('admin.finances.index')->with('success', 'Transaksi berhasil dicatat & Saldo Akhir otomatis diperbarui!');
     }
 
     public function destroy(Finance $finance)
     {
         Finance::destroy($finance->id);
-        // Catatan: Dalam sistem akuntansi nyata, transaksi biasanya tidak dihapus melainkan dijurnal balik.
         return redirect()->back()->with('success', 'Riwayat transaksi berhasil dihapus!');
     }
 }

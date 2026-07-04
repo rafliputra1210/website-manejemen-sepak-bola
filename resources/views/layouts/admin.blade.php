@@ -17,9 +17,37 @@
         .main-content { width: 100%; overflow-x: hidden; }
         .navbar-custom { background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
         .card-custom { border: none; border-radius: 10px; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05); }
+
+        /* Responsive Sidebar Styles */
+        @media (max-width: 991.98px) {
+            #sidebar {
+                margin-left: -260px;
+                position: fixed;
+                z-index: 1050;
+                height: 100vh;
+            }
+            #sidebar.active {
+                margin-left: 0;
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+                top: 0;
+                left: 0;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
 <div class="d-flex">
     <nav id="sidebar">
@@ -51,26 +79,31 @@
             </li>
                     <li class="text-uppercase text-muted px-3 mt-3 mb-1" style="font-size: 0.75rem; font-weight: bold;">Akademik & Keuangan</li>
             <li>
-                <a href="#" class="">
-                    <i class="bi bi-wallet2"></i> Uang Kas & Keuangan
-                </a>
-            </li>
-            <li>
-                <a href="#" class="">
-                    <i class="bi bi-award-fill"></i> Raport & Prestasi
-                </a>
-            </li>
-            <li>
-                <a href="#" class="">
-                    <i class="bi bi-megaphone-fill"></i> Pengumuman
-                </a>
-            </li>
+    <a href="{{ route('admin.finances.index') }}" class="{{ request()->routeIs('admin.finances.*') ? 'active' : '' }}">
+        <i class="bi bi-wallet2"></i> Uang Kas & Keuangan
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+        <i class="bi bi-award-fill"></i> Raport & Prestasi
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('admin.announcements.index') }}" class="{{ request()->routeIs('admin.announcements.*') ? 'active' : '' }}">
+        <i class="bi bi-megaphone-fill"></i> Pengumuman
+    </a>
+</li>
         </ul>
     </nav>
 
     <div class="main-content d-flex flex-column min-vh-100">
         <nav class="navbar navbar-expand navbar-custom px-4 py-3">
             <div class="container-fluid p-0">
+                <button type="button" id="sidebarCollapse" class="btn btn-sm btn-outline-secondary me-3 d-lg-none">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
                 <span class="navbar-brand mb-0 h1 fs-5 text-dark">@yield('title', 'Dashboard')</span>
                 <div class="d-flex items-center ms-auto">
                     <span class="me-3 text-muted small"><i class="bi bi-person-circle me-1"></i> Halo, <strong>{{ Auth::user()->name ?? 'Administrator' }}</strong></span>
@@ -100,6 +133,27 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarCollapseBtn = document.getElementById('sidebarCollapse');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        if (sidebarCollapseBtn) {
+            sidebarCollapseBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', function () {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        }
+    });
+</script>
 @stack('scripts')
 </body>
 </html>

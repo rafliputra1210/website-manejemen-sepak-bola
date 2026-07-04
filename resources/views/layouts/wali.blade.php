@@ -19,29 +19,30 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3 px-3">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3">
         <div class="container max-w-6xl">
-            <a class="navbar-brand font-weight-bold d-flex items-center" href="{{ route('wali.dashboard') }}">
-                <span class="fs-4 me-2">⚽</span>
-                <div>
-                    <div class="fs-6 font-bold tracking-wider">SUPERSEED ACADEMY</div>
-                    <div style="font-size: 0.65rem; color: #a7f3d0; line-height: 1;">PORTAL ORANG TUA / WALI</div>
-                </div>
+            <a class="navbar-brand font-weight-bold d-flex align-items-center gap-2" href="{{ route('wali.dashboard') }}">
+                <span>⚽</span> SUPERSEED PORTAL
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarNav">
-                <ul class="navbar-nav ms-auto gap-1">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
                     <li class="nav-item">
                         <a class="nav-link nav-link-custom {{ request()->routeIs('wali.dashboard') ? 'active' : '' }}" href="{{ route('wali.dashboard') }}">
                             <i class="bi bi-person-badge me-1"></i> Biodata Anak
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-custom {{ request()->routeIs('wali.raport.*') ? 'active' : '' }}" href="{{ route('wali.raport.absensi') }}">
-                            <i class="bi bi-award-fill me-1"></i> Raport & Absensi
+                        <a class="nav-link nav-link-custom {{ request()->routeIs('wali.absensi') ? 'active' : '' }}" href="{{ route('wali.absensi') }}">
+                            <i class="bi bi-calendar-check-fill me-1"></i> Absensi Anak
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom {{ request()->routeIs('wali.raport') ? 'active' : '' }}" href="{{ route('wali.raport') }}">
+                            <i class="bi bi-award-fill me-1"></i> Raport Anak
                         </a>
                     </li>
                     <li class="nav-item">
@@ -54,10 +55,10 @@
                             <i class="bi bi-megaphone-fill me-1"></i> Pengumuman
                         </a>
                     </li>
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0 border-top pt-2 pt-lg-0 border-secondary">
-                        <form action="{{ route('logout') }}" method="POST">
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-warning btn-sm w-100 font-weight-bold">
+                            <button type="submit" class="btn btn-warning btn-sm font-weight-bold px-3 w-100">
                                 <i class="bi bi-box-arrow-right me-1"></i> Keluar
                             </button>
                         </form>

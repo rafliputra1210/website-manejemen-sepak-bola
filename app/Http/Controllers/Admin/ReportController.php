@@ -17,7 +17,7 @@ class ReportController extends Controller
 
     public function create()
     {
-        $athletes = Athlete::orderBy('nama', 'asc')->get();
+        $athletes = Athlete::query()->orderBy('nama', 'asc')->get();
         return view('admin.reports.create', compact('athletes'));
     }
 
@@ -35,12 +35,12 @@ class ReportController extends Controller
             'catatan_pelatih' => 'nullable|string',
         ]);
 
-        // Gabungkan nilai menjadi format array JSON agar rapi di database
+        // Simpan dalam format JSON agar terstruktur
         $daftarNilai = [
             'Teknik & Dribbling' => $request->nilai_teknik,
             'Fisik & Stamina' => $request->nilai_fisik,
             'Pemahaman Taktik' => $request->nilai_taktik,
-            'Mental & Sportivitas' => $request->nilai_mental,
+            'Mental & Disiplin' => $request->nilai_mental,
         ];
 
         Report::create([
@@ -52,7 +52,7 @@ class ReportController extends Controller
             'catatan_pelatih' => $request->catatan_pelatih,
         ]);
 
-        return redirect()->route('admin.reports.index')->with('success', 'Raport evaluasi atlet berhasil diterbitkan!');
+        return redirect()->route('admin.reports.index')->with('success', 'Raport evaluasi & prestasi berhasil diterbitkan!');
     }
 
     public function destroy(Report $report)

@@ -24,45 +24,58 @@ class WaliPortalController extends Controller
         $athlete = $myAthletes->where('id', $selectedId)->first() ?? $myAthletes->first();
 
         // Ambil pengumuman terbaru dari akademi
-        $announcements = Announcement::where('is_active', '=', true, 'and')->latest('created_at')->take(5)->get();
+        $announcements = Announcement::query()->where('is_active', true)->latest('created_at')->take(5)->get();
 
         return view('wali.dashboard', compact('myAthletes', 'athlete', 'announcements'));
     }
 
     // 2. Laporan Raport & Rekapitulasi Absensi Anak
-    public function raportDanAbsensi(Request $request)
+    public function absensi(Request $request)
     {
         $myAthletes = Auth::user()->athletes;
         $selectedId = $request->get('child_id', $myAthletes->first()->id ?? null);
         $athlete = $myAthletes->where('id', $selectedId)->first() ?? $myAthletes->first();
 
         $attendances = [];
-        $reports = [];
         $rekapAbsen = ['hadir' => 0, 'izin' => 0, 'sakit' => 0, 'alpa' => 0];
 
         if ($athlete) {
-            // Tarik riwayat absensi anak
-            $attendances = Attendance::where('athlete_id', '=', $athlete->id, 'and')->latest('created_at')->paginate(10);
+            // Tarik riwayat absensi anak (diurutkan dari yang terbaru)
+            $attendances = Attendance::query()->where('athlete_id', $athlete->id)->latest()->paginate(15);
             
             // Hitung rekap statistik absensi
-            $rekapAbsen['hadir'] = Attendance::where('athlete_id', '=', $athlete->id, 'and')->where('status', '=', 'hadir', 'and')->count('*');
-            $rekapAbsen['izin'] = Attendance::where('athlete_id', '=', $athlete->id, 'and')->where('status', '=', 'izin', 'and')->count('*');
-            $rekapAbsen['sakit'] = Attendance::where('athlete_id', '=', $athlete->id, 'and')->where('status', '=', 'sakit', 'and')->count('*');
-            $rekapAbsen['alpa'] = Attendance::where('athlete_id', '=', $athlete->id, 'and')->where('status', '=', 'alpa', 'and')->count('*');
-
-            // Tarik data raport evaluasi
-            $reports = Report::where('athlete_id', '=', $athlete->id, 'and')->latest('created_at')->get();
+            $rekapAbsen['hadir'] = Attendance::query()->where('athlete_id', $athlete->id)->where('status', 'hadir')->count();
+            $rekapAbsen['izin'] = Attendance::query()->where('athlete_id', $athlete->id)->where('status', 'izin')->count();
+            $rekapAbsen['sakit'] = Attendance::query()->where('athlete_id', $athlete->id)->where('status', 'sakit')->count();
+            $rekapAbsen['alpa'] = Attendance::query()->where('athlete_id', $athlete->id)->where('status', 'alpa')->count();
         }
 
-        return view('wali.raport_absensi', compact('myAthletes', 'athlete', 'attendances', 'rekapAbsen', 'reports'));
+        return view('wali.absensi', compact('myAthletes', 'athlete', 'attendances', 'rekapAbsen'));
+    }
+
+    // 3. Halaman Khusus Raport & Evaluasi Skill Anak
+    public function raport(Request $request)
+    {
+        $myAthletes = Auth::user()->athletes;
+        $selectedId = $request->get('child_id', $myAthletes->first()->id ?? null);
+        $athlete = $myAthletes->where('id', $selectedId)->first() ?? $myAthletes->first();
+
+        $reports = [];
+
+        if ($athlete) {
+            // Tarik data raport evaluasi
+            $reports = Report::query()->where('athlete_id', $athlete->id)->latest()->get();
+        }
+
+        return view('wali.raport', compact('myAthletes', 'athlete', 'reports'));
     }
 
     // 3. Transparansi Laporan Keuangan (Uang Kas)
     public function keuangan()
     {
         $finances = Finance::orderBy('tanggal', 'desc')->orderBy('id', 'desc')->paginate(15);
-        $totalPemasukan = Finance::where('jenis', '=', 'pemasukan', 'and')->sum('nominal');
-        $totalPengeluaran = Finance::where('jenis', '=', 'pengeluaran', 'and')->sum('nominal');
+        $totalPemasukan = Finance::query()->where('jenis', 'pemasukan')->sum('nominal');
+        $totalPengeluaran = Finance::query()->where('jenis', 'pengeluaran')->sum('nominal');
         $saldoSekarang = $totalPemasukan - $totalPengeluaran;
 
         return view('wali.keuangan', compact('finances', 'totalPemasukan', 'totalPengeluaran', 'saldoSekarang'));
@@ -71,7 +84,7 @@ class WaliPortalController extends Controller
     // 4. Daftar Pengumuman Lengkap
     public function pengumuman()
     {
-        $announcements = Announcement::where('is_active', '=', true, 'and')->latest('created_at')->paginate(10);
+        $announcements = Announcement::query()->where('is_active', true)->latest('created_at')->paginate(10);
         return view('wali.pengumuman', compact('announcements'));
     }
 }

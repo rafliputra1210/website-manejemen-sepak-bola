@@ -1,12 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'Tambah Data Atlet & Akun Wali Murid')
+@section('title', 'Tambah Data Atlet & Akun Wali')
 
 @section('content')
-<div class="card card-custom bg-white p-4 max-w-4xl">
+<div class="card card-custom bg-white p-4">
     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="mb-0 font-weight-bold">Form Input Data Atlet / Murid Baru</h5>
-            <p class="text-muted small mb-0">Lengkapi biodata siswa sekaligus buatkan akun akses portal untuk orang tua.</p>
+            <h5 class="mb-0 font-weight-bold">Form Input Siswa & Pengaktifan Akun Otomatis</h5>
+            <p class="text-muted small mb-0">Setiap data siswa yang ditambahkan akan otomatis dibuatkan akun login portal untuk orang tua/wali.</p>
         </div>
         <a href="{{ route('admin.athletes.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
     </div>
@@ -15,9 +15,7 @@
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong class="d-block mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Terdapat kesalahan input!</strong>
             <ul class="mb-0 small">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+                @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -26,131 +24,125 @@
     <form action="{{ route('admin.athletes.store') }}" method="POST">
         @csrf
         
-        <!-- BAGIAN 1: BIODATA ATLET / SISWA -->
-        <h6 class="text-primary font-weight-bold mb-3"><i class="bi bi-person-fill me-2"></i>A. Biodata Siswa / Atlet</h6>
-        <div class="row g-3 mb-4">
-            <div class="col-md-8">
-                <label class="form-label font-weight-bold">Nama Lengkap Siswa <span class="text-danger">*</span></label>
-                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" required placeholder="Contoh: Raditya Pratama">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label font-weight-bold">Nomor Punggung</label>
-                <input type="number" name="nomor_punggung" class="form-control" value="{{ old('nomor_punggung') }}" placeholder="Contoh: 10">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label font-weight-bold">Posisi Bermain</label>
-                <select name="posisi_bermain" class="form-select">
-                    <option value="">-- Pilih Posisi --</option>
-                    @foreach(['Penyerang (Forward)', 'Gelandang (Midfielder)', 'Pemain Bertahan (Defender)', 'Penjaga Gawang (Goalkeeper)'] as $posisi)
-                        <option value="{{ $posisi }}" {{ old('posisi_bermain') == $posisi ? 'selected' : '' }}>{{ $posisi }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label font-weight-bold">Tanggal Lahir</label>
-                <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label font-weight-bold">Nomor WA Orang Tua/Wali <span class="text-danger">*</span></label>
-                <input type="text" name="nomor_wa_ortu" class="form-control" value="{{ old('nomor_wa_ortu') }}" required placeholder="081234567890">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label font-weight-bold">Nomor WA Siswa (Opsional)</label>
-                <input type="text" name="nomor_wa" class="form-control" value="{{ old('nomor_wa') }}" placeholder="089876543210">
-            </div>
-            <div class="col-md-12">
-                <label class="form-label font-weight-bold">Alamat Domisili</label>
-                <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Raya Malang No. 123...">{{ old('alamat') }}</textarea>
-            </div>
-        </div>
-
-        <!-- BAGIAN 2: PENGATURAN AKUN LOGIN WALI MURID -->
-        <div class="p-4 bg-light rounded border mb-4">
-            <h6 class="text-success font-weight-bold mb-3"><i class="bi bi-shield-lock-fill me-2"></i>B. Pengaturan Akun Portal Wali Murid</h6>
-            <p class="text-muted small mb-3">Akun ini digunakan oleh orang tua untuk masuk ke portal web melihat absensi, raport, dan uang kas anak.</p>
+        <!-- LAYOUT 2 KOLOM -->
+        <div class="row g-4">
             
-            <div class="mb-3">
-                <label class="form-label font-weight-bold d-block">Pilih Metode Akun Wali:</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="opsi_akun" id="opsi_baru" value="baru" {{ old('opsi_akun', 'baru') == 'baru' ? 'checked' : '' }} onchange="toggleAccountSection()">
-                    <label class="form-check-label font-weight-bold text-success" for="opsi_baru">✨ Buat Akun Wali Murid Baru</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="opsi_akun" id="opsi_lama" value="lama" {{ old('opsi_akun') == 'lama' ? 'checked' : '' }} onchange="toggleAccountSection()">
-                    <label class="form-check-label" for="opsi_lama">🔗 Hubungkan ke Akun Wali yang Sudah Ada</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="opsi_akun" id="opsi_tanpa" value="tanpa_akun" {{ old('opsi_akun') == 'tanpa_akun' ? 'checked' : '' }} onchange="toggleAccountSection()">
-                    <label class="form-check-label text-muted" for="opsi_tanpa">❌ Jangan Buatkan Akun Dulu</label>
-                </div>
-            </div>
-
-            <!-- Form Buat Akun Baru (Muncul jika opsi 'baru' dipilih) -->
-            <div id="section_akun_baru" class="row g-3 pt-2 border-top">
-                <div class="col-md-4">
-                    <label class="form-label small font-weight-bold">Nama Orang Tua / Wali <span class="text-danger">*</span></label>
-                    <input type="text" name="nama_wali" id="nama_wali" class="form-control" value="{{ old('nama_wali') }}" placeholder="Contoh: Budi Santoso">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small font-weight-bold">Username Login <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-person"></i></span>
-                        <input type="text" name="username_wali" id="username_wali" class="form-control" value="{{ old('username_wali') }}" placeholder="ortu_raditya">
+            <!-- KOLOM KIRI: BIODATA MURID -->
+            <div class="col-lg-7 border-end-lg pe-lg-4">
+                <h6 class="text-primary font-weight-bold mb-3"><i class="bi bi-person-fill me-2"></i>A. Biodata Siswa / Atlet</h6>
+                
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label font-weight-bold">Nama Lengkap Siswa <span class="text-danger">*</span></label>
+                        <input type="text" name="nama" id="input_nama" class="form-control" value="{{ old('nama') }}" required placeholder="Contoh: Rafli Putra" oninput="updateLivePreview()">
+                        <div class="form-text text-xs">Akan otomatis diubah menjadi Username login (tanpa spasi).</div>
                     </div>
-                    <div class="form-text text-xs">Gunakan huruf kecil & tanpa spasi.</div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small font-weight-bold">Password Login <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-key"></i></span>
-                        <input type="text" name="password_wali" id="password_wali" class="form-control" value="{{ old('password_wali', 'superseed123') }}" placeholder="Minimal 6 karakter">
+                    <div class="col-md-4">
+                        <label class="form-label font-weight-bold">Nomor Punggung</label>
+                        <input type="number" name="nomor_punggung" class="form-control" value="{{ old('nomor_punggung') }}" placeholder="Contoh: 10">
                     </div>
-                    <div class="form-text text-xs text-success">Password default: <b>superseed123</b> (bisa diganti).</div>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <input type="date" name="tanggal_lahir" id="input_tgl" class="form-control" value="{{ old('tanggal_lahir') }}" required onchange="updateLivePreview()">
+                        <div class="form-text text-xs text-success font-weight-bold">Otomatis menjadi Password (format DD-MM-YYYY).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Posisi Bermain</label>
+                        <select name="posisi_bermain" class="form-select">
+                            <option value="">-- Pilih Posisi --</option>
+                            @foreach(['Penyerang (Forward)', 'Gelandang (Midfielder)', 'Pemain Bertahan (Defender)', 'Penjaga Gawang (Goalkeeper)'] as $posisi)
+                                <option value="{{ $posisi }}" {{ old('posisi_bermain') == $posisi ? 'selected' : '' }}>{{ $posisi }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Nomor WA Orang Tua/Wali <span class="text-danger">*</span></label>
+                        <input type="text" name="nomor_wa_ortu" class="form-control" value="{{ old('nomor_wa_ortu') }}" required placeholder="081234567890">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label font-weight-bold">Nomor WA Siswa (Opsional)</label>
+                        <input type="text" name="nomor_wa" class="form-control" value="{{ old('nomor_wa') }}" placeholder="089876543210">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label font-weight-bold">Alamat Domisili</label>
+                        <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Raya No. 123...">{{ old('alamat') }}</textarea>
+                    </div>
                 </div>
             </div>
 
-            <!-- Dropdown Pilih Akun Lama (Muncul jika opsi 'lama' dipilih) -->
-            <div id="section_akun_lama" class="row g-3 pt-2 border-top" style="display: none;">
-                <div class="col-md-12">
-                    <label class="form-label small font-weight-bold">Pilih Akun Orang Tua yang Sudah Terdaftar <span class="text-danger">*</span></label>
-                    <select name="user_id" class="form-select">
-                        <option value="">-- Pilih Akun Wali Murid --</option>
-                        @foreach($parents as $parent)
-                            <option value="{{ $parent->id }}" {{ old('user_id') == $parent->id ? 'selected' : '' }}>
-                                {{ $parent->name }} — (Username: {{ $parent->username }})
-                            </option>
-                        @endforeach
-                    </select>
-                    <div class="form-text text-xs">Berguna jika siswa memiliki kakak atau adik di akademi sehingga orang tua cukup punya 1 akun login.</div>
+            <!-- KOLOM KANAN: PENGAKTIFAN AKUN WALI (LANGSUNG AKTIF) -->
+            <div class="col-lg-5">
+                <div class="p-4 bg-light rounded-3 border h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="text-success font-weight-bold mb-0"><i class="bi bi-shield-lock-fill me-2"></i>B. Pengaktifan Akun Portal Wali</h6>
+                            <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Aktif Otomatis</span>
+                        </div>
+                        
+                        <!-- Input Nama Wali -->
+                        <div class="mb-3">
+                            <label class="form-label small font-weight-bold">Nama Orang Tua / Wali <span class="text-danger">*</span></label>
+                            <input type="text" name="nama_wali" class="form-control font-weight-bold" value="{{ old('nama_wali') }}" required placeholder="Contoh: Budi">
+                            <div class="form-text text-xs">Nama pemilik akun yang akan tampil saat login di portal.</div>
+                        </div>
+
+                        <!-- KOTAK LIVE PREVIEW -->
+                        <div class="p-3 bg-white rounded border border-success border-opacity-50 mt-4 shadow-sm">
+                            <span class="badge bg-success mb-3"><i class="bi bi-eye-fill me-1"></i> Live Preview Kredensial:</span>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-2 text-sm">
+                                <span class="text-muted small">Username Login:</span>
+                                <code id="preview_user" class="fs-6 text-primary font-weight-bold">ketik.nama.murid...</code>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center text-sm">
+                                <span class="text-muted small">Password (DD-MM-YYYY):</span>
+                                <code id="preview_pass" class="fs-6 text-dark font-weight-bold">pilih.tgl.lahir...</code>
+                            </div>
+                            
+                            <hr class="my-3">
+                            <small class="text-muted text-xs d-block" style="line-height: 1.4;">
+                                💡 Sistem otomatis mengubah nama murid menjadi lowercase tanpa spasi untuk <b>Username</b>, dan merubah tanggal lahir ke angka format <b>DD-MM-YYYY</b> untuk <b>Password</b>.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Simpan -->
+                    <div class="pt-3 border-top mt-4">
+                        <button type="submit" class="btn btn-primary w-100 py-2.5 font-weight-bold shadow">
+                            <i class="bi bi-save me-1"></i> Simpan Siswa & Aktifkan Akun
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Tombol Simpan -->
-        <div class="pt-3 border-top d-flex justify-content-end gap-2">
-            <a href="{{ route('admin.athletes.index') }}" class="btn btn-light border px-4">Batal</a>
-            <button type="submit" class="btn btn-primary px-5 font-weight-bold">
-                <i class="bi bi-save me-1"></i> Simpan Data Atlet & Akun Wali
-            </button>
         </div>
     </form>
 </div>
 
+<!-- SCRIPT LIVE PREVIEW -->
 <script>
-    function toggleAccountSection() {
-        const opsiBaru = document.getElementById('opsi_baru').checked;
-        const opsiLama = document.getElementById('opsi_lama').checked;
+    function updateLivePreview() {
+        const nama = document.getElementById('input_nama').value;
+        const tgl = document.getElementById('input_tgl').value;
         
-        document.getElementById('section_akun_baru').style.display = opsiBaru ? 'flex' : 'none';
-        document.getElementById('section_akun_lama').style.display = opsiLama ? 'flex' : 'none';
+        // Generate Username: huruf kecil & hapus spasi/karakter khusus
+        let username = nama.toLowerCase().replace(/[^a-z0-9]/g, '');
+        document.getElementById('preview_user').innerText = username ? username : 'ketik.nama.murid...';
         
-        // Atur atribut required via JS agar form tidak error saat disubmit
-        document.getElementById('nama_wali').required = opsiBaru;
-        document.getElementById('username_wali').required = opsiBaru;
-        document.getElementById('password_wali').required = opsiBaru;
+        // Generate Password format DD-MM-YYYY (Contoh: 04-07-2026)
+        if (tgl) {
+            const parts = tgl.split('-'); // input date format YYYY-MM-DD
+            if (parts.length === 3) {
+                document.getElementById('preview_pass').innerText = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+        } else {
+            document.getElementById('preview_pass').innerText = 'pilih.tgl.lahir...';
+        }
     }
-    
-    // Jalankan saat halaman pertama kali dimuat
-    window.onload = toggleAccountSection;
+
+    // Jalankan saat halaman pertama kali dimuat (misal saat error validasi/old input)
+    window.onload = function() {
+        updateLivePreview();
+    };
 </script>
 @endsection

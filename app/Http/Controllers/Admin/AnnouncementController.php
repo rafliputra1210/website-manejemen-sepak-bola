@@ -10,7 +10,7 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::latest('created_at')->paginate(10);
+        $announcements = Announcement::query()->latest('created_at')->paginate(10);
         return view('admin.announcements.index', compact('announcements'));
     }
 
@@ -25,7 +25,6 @@ class AnnouncementController extends Controller
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
             'tanggal' => 'required|date',
-            'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
