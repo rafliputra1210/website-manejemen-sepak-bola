@@ -1,0 +1,1 @@
+<h1>Selamat Datang Wali Murid! <form action="{{ route('logout') }}" method="POST">@csrf <button type="submit">Logout</button></form></h1>
