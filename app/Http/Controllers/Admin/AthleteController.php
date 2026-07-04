@@ -18,7 +18,7 @@ class AthleteController extends Controller
     public function create()
     {
         // Mengambil daftar user dengan role 'wali_murid' untuk dikaitkan ke atlet
-        $parents = User::where('role', 'wali_murid')->get();
+        $parents = User::query()->where('role', 'wali_murid')->get();
         return view('admin.athletes.create', compact('parents'));
     }
 
@@ -42,7 +42,7 @@ class AthleteController extends Controller
 
     public function edit(Athlete $athlete)
     {
-        $parents = User::where('role', 'wali_murid')->get();
+        $parents = User::query()->where('role', 'wali_murid')->get();
         return view('admin.athletes.edit', compact('athlete', 'parents'));
     }
 

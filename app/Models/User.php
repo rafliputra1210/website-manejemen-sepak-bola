@@ -29,4 +29,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function athletes()
+    {
+        return $this->hasMany(Athlete::class, 'user_id');
+    }
 }

@@ -40,16 +40,16 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="">
+                <a href="{{ route('admin.coaches.index') }}" class="{{ request()->routeIs('admin.coaches.*') ? 'active' : '' }}">
                     <i class="bi bi-person-badge-fill"></i> Data Coach
                 </a>
             </li>
             <li>
-                <a href="#" class="">
+                <a href="{{ route('admin.attendances.index') }}" class="{{ request()->routeIs('admin.attendances.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-check-fill"></i> Absensi Murid
                 </a>
             </li>
-            <li class="text-uppercase text-muted px-3 mt-3 mb-1" style="font-size: 0.75rem; font-weight: bold;">Akademik & Keuangan</li>
+                    <li class="text-uppercase text-muted px-3 mt-3 mb-1" style="font-size: 0.75rem; font-weight: bold;">Akademik & Keuangan</li>
             <li>
                 <a href="#" class="">
                     <i class="bi bi-wallet2"></i> Uang Kas & Keuangan
