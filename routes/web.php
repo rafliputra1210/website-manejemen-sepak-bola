@@ -13,6 +13,10 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Wali\WaliPortalController;
 use App\Http\Controllers\Admin\WaliManagerController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\AchievementController;
+
 
 
 // Rute Modul Landing Page (Publik)
@@ -86,4 +90,25 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // --- RUTE RESOURCE CRUD ---
     Route::resource('/athletes', AthleteController::class);
     Route::resource('/coaches', CoachController::class);
+});
+Route::controller(LandingPageController::class)->group(function () {
+    Route::get('/', 'index')->name('landing.home');
+    Route::get('/berita', 'news')->name('landing.news'); // <-- Daftar Berita Publik
+    Route::get('/berita/{slug}', 'newsDetail')->name('landing.news.detail'); // <-- Detail Baca Berita
+    Route::post('/berita/{slug}/comment', 'storeComment')->name('landing.news.comment'); // <-- Tambah route komentar
+    // ... rute publik lainnya (profil-coach, jadwal, dll) ...
+});
+
+// --- 2. RUTE ADMIN (Tambahkan di dalam grup middleware Admin) ---
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // ... rute admin sebelumnya ...
+    
+    // Rute CRUD Berita & Artikel
+    Route::resource('/news', NewsController::class);
+    
+    // Rute CRUD Galeri
+    Route::resource('/galleries', GalleryController::class);
+    
+    // Rute CRUD Prestasi
+    Route::resource('/achievements', AchievementController::class);
 });

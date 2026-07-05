@@ -16,10 +16,13 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             @forelse($galleries as $gallery)
             <div class="group relative aspect-square overflow-hidden rounded-xl bg-slate-100 fade-in border border-slate-200">
-                <img src="{{ asset('storage/' . $gallery->foto_bukti) }}" alt="Kegiatan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                    <span class="text-white font-bold text-sm">{{ $gallery->athlete->nama ?? 'Siswa' }}</span>
-                    <span class="text-brand-light text-xs">{{ $gallery->tanggal ?? $gallery->created_at->format('d M Y') }}</span>
+                <img src="{{ asset('storage/' . $gallery->foto) }}" alt="{{ $gallery->judul }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-brand-navy/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                    <h3 class="text-white font-bold text-lg leading-tight mb-1">{{ $gallery->judul }}</h3>
+                    <span class="text-brand-light text-xs font-medium"><i class="bi bi-calendar-event me-1"></i> {{ \Carbon\Carbon::parse($gallery->tanggal)->translatedFormat('d M Y') }}</span>
+                    @if($gallery->deskripsi)
+                    <p class="text-slate-300 text-xs mt-2 line-clamp-2">{{ $gallery->deskripsi }}</p>
+                    @endif
                 </div>
             </div>
             @empty

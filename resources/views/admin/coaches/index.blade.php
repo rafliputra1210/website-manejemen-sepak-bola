@@ -45,13 +45,15 @@
                     </div>
 
                     <div class="p-3 bg-light rounded border text-xs">
-                        <span class="font-weight-bold d-block mb-1 text-dark">Wajib gunakan nama kolom header ini di baris ke-1 Excel:</span>
-                        <code class="text-primary font-weight-bold">nama_coach</code>, 
-                        <code class="text-dark">status_lisensi</code> (berlisensi/tidak_berlisensi), 
+                        <span class="font-weight-bold d-block mb-1 text-dark">Tips Impor Data:</span>
+                        Gunakan tombol <strong>Ekspor Excel</strong> terlebih dahulu untuk mengunduh template format tabel yang benar.<br>
+                        Anda juga bisa menggunakan kolom header berikut:<br>
+                        <code class="text-primary font-weight-bold">nama_lengkap_coach</code>, 
+                        <code class="text-dark">status_lisensi</code>, 
                         <code class="text-dark">detail_lisensi</code>, 
-                        <code class="text-dark">nomor_wa</code>, 
-                        <code class="text-dark">referensi_pengalaman</code>, 
-                        <code class="text-dark">alamat</code>
+                        <code class="text-dark">nomor_whatsapp</code>, 
+                        <code class="text-dark">referensi_pengalaman_melatih</code>, 
+                        <code class="text-dark">alamat_domisili</code>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">

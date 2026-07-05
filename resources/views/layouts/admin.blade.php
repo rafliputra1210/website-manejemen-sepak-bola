@@ -126,6 +126,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.schedules.index') }}" class="{{ request()->routeIs('admin.schedules.*') ? 'active' : '' }}">
+                    <i class="bi bi-calendar-event-fill"></i> Jadwal Latihan
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.attendances.index') }}" class="{{ request()->routeIs('admin.attendances.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-check-fill"></i> Absensi Murid
                 </a>
@@ -139,7 +144,12 @@
             </li>
             <li>
                 <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
-                    <i class="bi bi-award-fill"></i> Raport & Prestasi
+                    <i class="bi bi-award-fill"></i> Raport Murid
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.achievements.index') }}" class="{{ request()->routeIs('admin.achievements.*') ? 'active' : '' }}">
+                    <i class="bi bi-trophy-fill"></i> Prestasi Klub
                 </a>
             </li>
             <li>
@@ -152,6 +162,16 @@
             <li>
                 <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
                     <i class="bi bi-images"></i> Banner Beranda
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.news.index') }}" class="{{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
+                    <i class="bi bi-newspaper"></i> Berita & Artikel
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.galleries.index') }}" class="{{ request()->routeIs('admin.galleries.*') ? 'active' : '' }}">
+                    <i class="bi bi-camera-fill"></i> Galeri Foto
                 </a>
             </li>
         </ul>

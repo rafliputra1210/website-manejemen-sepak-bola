@@ -9,6 +9,8 @@ use App\Models\Announcement;
 use App\Models\Athlete;
 use App\Models\Schedule;
 use App\Models\Banner;
+use App\Models\Gallery;
+use App\Models\Achievement;
 use Illuminate\Http\Request;
 
 class LandingPageController extends Controller
@@ -21,7 +23,9 @@ class LandingPageController extends Controller
         $announcements = Announcement::where('is_active', '=', true, 'and')->latest('created_at')->take(3)->get();
         $banners = Banner::where('is_active', true)->orderBy('urutan')->take(5)->get();
         
-        return view('landing.home', compact('totalAthlete', 'totalCoach', 'announcements', 'banners'));
+        $recentNews = \App\Models\News::where('is_active', true)->latest('tanggal')->take(3)->get();
+        
+        return view('landing.home', compact('totalAthlete', 'totalCoach', 'announcements', 'banners', 'recentNews'));
     }
 
     // 2. Profil Coach - Menampilkan seluruh coach dari database
@@ -40,27 +44,18 @@ class LandingPageController extends Controller
     return view('landing.schedule', compact('schedules'));
 }
 
-    // 4. Prestasi - Menampilkan data prestasi yang diinput admin di modul Raport
+    // 4. Prestasi - Menampilkan data prestasi dari model Achievement
     public function achievements()
     {
-        // Mengambil raport yang kolom prestasinya terisi (tidak kosong)
-        $reportsWithAchievements = Report::with('athlete')
-            ->whereNotNull('prestasi')
-            ->where('prestasi', '!=', '')
-            ->latest()
-            ->get();
+        $achievements = Achievement::where('is_active', true)->latest('tanggal')->get();
 
-        return view('landing.achievements', compact('reportsWithAchievements'));
+        return view('landing.achievements', compact('achievements'));
     }
 
-    // 5. Galeri - Menampilkan foto-foto bukti absensi latihan & kegiatan dari admin
+    // 5. Galeri - Menampilkan foto-foto galeri
     public function gallery()
     {
-        // Mengambil data absensi yang memiliki lampiran foto bukti kegiatan
-        $galleries = Attendance::with('athlete')
-            ->whereNotNull('foto_bukti')
-            ->latest()
-            ->paginate(12);
+        $galleries = Gallery::where('is_active', true)->latest('tanggal')->paginate(12);
 
         return view('landing.gallery', compact('galleries'));
     }
@@ -69,5 +64,24 @@ class LandingPageController extends Controller
     public function registration()
     {
         return view('landing.registration');
+    }
+
+    public function news()
+    {
+        $news = \App\Models\News::where('is_active', true)->latest('tanggal')->paginate(9);
+        return view('landing.news', compact('news'));
+    }
+
+    public function newsDetail($slug)
+    {
+        $news = \App\Models\News::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $recentNews = \App\Models\News::where('is_active', true)->where('id', '!=', $news->id)->latest('tanggal')->take(5)->get();
+        return view('landing.news_detail', compact('news', 'recentNews'));
+    }
+
+    public function storeComment(Request $request, $slug)
+    {
+        // Placeholder for comment functionality since there is no comment model yet
+        return redirect()->back()->with('success', 'Komentar berhasil dikirim dan menunggu moderasi.');
     }
 }

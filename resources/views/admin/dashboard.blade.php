@@ -34,7 +34,12 @@
         <div class="card card-custom p-4 h-100 d-flex flex-row justify-content-between align-items-center">
             <div>
                 <h6 class="text-uppercase mb-2 text-muted fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">Saldo Uang Kas</h6>
-                <h4 class="mb-0 fw-black text-brand-navy">Rp 0</h4>
+                @php
+                    $pemasukan = \App\Models\Finance::where('jenis', 'pemasukan')->sum('nominal');
+                    $pengeluaran = \App\Models\Finance::where('jenis', 'pengeluaran')->sum('nominal');
+                    $totalSaldo = $pemasukan - $pengeluaran;
+                @endphp
+                <h4 class="mb-0 fw-black text-brand-navy">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</h4>
             </div>
             <div class="bg-brand-light text-brand-blue rounded p-3 d-flex align-items-center justify-content-center">
                 <i class="bi bi-wallet2 fs-3"></i>

@@ -99,6 +99,7 @@
                     @php
                         $navItems = [
                             ['route' => 'landing.home', 'label' => 'Beranda'],
+                            ['route' => 'landing.news', 'label' => 'Berita'],
                             ['route' => 'landing.coaches', 'label' => 'Pelatih'],
                             ['route' => 'landing.schedule', 'label' => 'Jadwal'],
                             ['route' => 'landing.achievements', 'label' => 'Prestasi'],

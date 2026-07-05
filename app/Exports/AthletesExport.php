@@ -26,7 +26,7 @@ class AthletesExport implements FromCollection, WithHeadings, WithMapping, Shoul
         return [
             'No.',
             'Nama Lengkap Siswa',
-            'Kelompok Usia / No. Punggung',
+            'No. Punggung',
             'Posisi Bermain',
             'Tanggal Lahir',
             'Nomor WA Orang Tua',
@@ -45,7 +45,7 @@ class AthletesExport implements FromCollection, WithHeadings, WithMapping, Shoul
         return [
             $this->rowNumber,
             $athlete->nama,
-            'U-' . ($athlete->nomor_punggung ?? 'XX'),
+            $athlete->nomor_punggung,
             $athlete->posisi_bermain ?? 'Belum ditentukan',
             $athlete->tanggal_lahir ? \Carbon\Carbon::parse($athlete->tanggal_lahir)->format('d/m/Y') : '-',
             $athlete->nomor_wa_ortu,

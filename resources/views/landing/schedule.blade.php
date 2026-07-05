@@ -30,14 +30,14 @@
                         <tr class="hover:bg-slate-50 transition-colors group">
                             <td class="py-4 px-6">
                                 <span class="inline-block px-3 py-1 bg-brand-light text-brand-blue rounded-full font-bold text-sm">
-                                    {{ $schedule->kelompok_umur ?? 'Umum' }}
+                                    {{ $schedule->kelompok_usia ?? 'Umum' }}
                                 </span>
                             </td>
                             <td class="py-4 px-6 font-medium text-slate-700">
                                 <i class="bi bi-calendar-event text-brand-blue mr-2"></i> {{ $schedule->hari ?? '-' }}
                             </td>
                             <td class="py-4 px-6 text-slate-600">
-                                <i class="bi bi-clock text-brand-gray mr-2"></i> {{ $schedule->jam_mulai ?? '-' }} - {{ $schedule->jam_selesai ?? '-' }}
+                                <i class="bi bi-clock text-brand-gray mr-2"></i> {{ $schedule->waktu ?? '-' }}
                             </td>
                             <td class="py-4 px-6 text-slate-600">
                                 {{ $schedule->lokasi ?? 'Lapangan Utama' }}

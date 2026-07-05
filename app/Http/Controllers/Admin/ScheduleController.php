@@ -36,4 +36,25 @@ class ScheduleController extends Controller
         Schedule::destroy($schedule->id);
         return redirect()->back()->with('success', 'Jadwal latihan berhasil dihapus!');
     }
+
+    public function edit(Schedule $schedule)
+    {
+        $coaches = Coach::orderBy('nama', 'asc')->get();
+        return view('admin.schedules.edit', compact('schedule', 'coaches'));
+    }
+
+    public function update(Request $request, Schedule $schedule)
+    {
+        $validated = $request->validate([
+            'kelompok_usia' => 'required|string|max:100',
+            'hari' => 'required|string|max:100',
+            'waktu' => 'required|string|max:100',
+            'lokasi' => 'required|string|max:255',
+            'coach_id' => 'nullable|exists:coaches,id',
+        ]);
+
+        $schedule->update($validated);
+
+        return redirect()->route('admin.schedules.index')->with('success', 'Jadwal latihan berhasil diperbarui!');
+    }
 }

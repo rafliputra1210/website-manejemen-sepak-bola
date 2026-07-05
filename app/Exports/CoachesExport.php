@@ -24,10 +24,10 @@ class CoachesExport implements FromCollection, WithHeadings, WithMapping, Should
         return [
             'No.',
             'Nama Lengkap Coach',
-            'Status Lisensi',
-            'Detail Lisensi',
+            'Status Lisensi (berlisensi / tidak_berlisensi)',
+            'Detail Lisensi (Opsional)',
             'Nomor WhatsApp',
-            'Referensi & Pengalaman Melatih',
+            'Referensi Pengalaman Melatih',
             'Alamat Domisili',
             'Tanggal Bergabung'
         ];

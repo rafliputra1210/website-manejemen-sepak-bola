@@ -157,6 +157,62 @@
     </div>
 </section>
 
+{{-- ===================== BERITA TERBARU ===================== --}}
+@if(isset($recentNews) && $recentNews->count() > 0)
+<section class="py-24 bg-white fade-in">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-brand-blue font-semibold tracking-wide text-sm uppercase mb-3">Berita & Informasi</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-brand-navy">Kabar Terbaru</h3>
+            </div>
+            <a href="{{ route('landing.news') }}" class="hidden sm:inline-flex items-center gap-2 text-brand-blue font-semibold hover:text-blue-800 transition-colors">
+                Lihat Semua <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @foreach($recentNews as $newsItem)
+            <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-hover transition-all duration-300 group flex flex-col">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    @if($newsItem->foto)
+                        <img src="{{ asset('storage/' . $newsItem->foto) }}" alt="{{ $newsItem->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                            <i class="bi bi-image text-4xl"></i>
+                        </div>
+                    @endif
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-brand-blue shadow-sm">
+                        {{ $newsItem->kategori }}
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex items-center gap-4 text-xs text-slate-500 font-medium mb-3">
+                        <span class="flex items-center gap-1"><i class="bi bi-calendar-event"></i> {{ \Carbon\Carbon::parse($newsItem->tanggal)->format('d M Y') }}</span>
+                    </div>
+                    <h4 class="text-lg font-bold text-brand-navy mb-3 line-clamp-2 group-hover:text-brand-blue transition-colors">
+                        <a href="{{ route('landing.news.detail', $newsItem->slug) }}">{{ $newsItem->judul }}</a>
+                    </h4>
+                    <p class="text-slate-600 text-sm line-clamp-3 mb-4 flex-grow">
+                        {{ Str::limit(strip_tags($newsItem->konten), 120) }}
+                    </p>
+                    <a href="{{ route('landing.news.detail', $newsItem->slug) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-blue hover:text-blue-800 transition-colors mt-auto">
+                        Baca Selengkapnya <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        
+        <div class="mt-10 text-center sm:hidden">
+            <a href="{{ route('landing.news') }}" class="inline-flex items-center gap-2 text-brand-blue font-semibold hover:text-blue-800 transition-colors">
+                Lihat Semua Berita <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- ===================== TESTIMONIALS ===================== --}}
 <section class="py-24 bg-white fade-in">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
