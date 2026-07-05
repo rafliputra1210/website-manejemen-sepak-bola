@@ -3,14 +3,29 @@
 
 @section('content')
 <div class="card card-custom bg-white p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <div>
             <h5 class="mb-1 font-weight-bold">Daftar Atlet Superseed Academy</h5>
             <p class="text-muted small mb-0">Kelola biodata siswa sekaligus pantau akun akses portal orang tua/wali.</p>
         </div>
-        <a href="{{ route('admin.athletes.create') }}" class="btn btn-primary btn-sm font-weight-bold">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Siswa & Akun Wali
-        </a>
+        
+        <!-- Kelompok Tombol Aksi -->
+        <div class="d-flex gap-2">
+            <!-- TOMBOL EKSPOR EXCEL -->
+            <a href="{{ route('admin.athletes.export') }}" class="btn btn-success btn-sm font-weight-bold d-flex align-items-center gap-1 shadow-sm">
+                <i class="bi bi-file-earmark-excel-fill fs-6"></i> Ekspor Excel (.xlsx)
+            </a>
+
+            <!-- TOMBOL IMPOR EXCEL -->
+            <button type="button" class="btn btn-warning btn-sm font-weight-bold text-dark d-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportAthlete">
+                <i class="bi bi-file-earmark-arrow-up-fill fs-6"></i> Upload / Impor Excel
+            </button>
+
+            <!-- TOMBOL TAMBAH DATA -->
+            <a href="{{ route('admin.athletes.create') }}" class="btn btn-primary btn-sm font-weight-bold d-flex align-items-center gap-1 shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Tambah Siswa & Akun Wali
+            </a>
+        </div>
     </div>
 
     <div class="table-responsive">
@@ -73,5 +88,52 @@
         </table>
     </div>
     <div class="mt-3">{{ $athletes->links() }}</div>
+</div>
+
+<!-- MODAL POPUP UPLOAD EXCEL SISWA (Taruh di paling bawah sebelum endsection) -->
+<div class="modal fade" id="modalImportAthlete" tabindex="-1" aria-labelledby="modalImportAthleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title font-weight-bold" id="modalImportAthleteLabel"><i class="bi bi-cloud-upload-fill me-2"></i>Upload File Excel Siswa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.athletes.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body p-4">
+                    <div class="alert alert-info small mb-3">
+                        <strong>💡 Aturan Upload:</strong>
+                        <ul class="mb-0 pl-3 mt-1">
+                            <li>Format file harus berakhiran <b>.xlsx</b>, <b>.xls</b>, atau <b>.csv</b>.</li>
+                            <li>Baris pertama Excel harus berisi nama kolom (Header).</li>
+                            <li>Sistem akan <b>otomatis membuatkan Akun Wali Murid</b> dari nama & tanggal lahir yang ada di file Excel!</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Pilih File Excel dari Komputer <span class="text-danger">*</span></label>
+                        <input type="file" name="file_excel" class="form-control" accept=".xlsx, .xls, .csv" required>
+                    </div>
+
+                    <!-- Panduan Nama Kolom Excel -->
+                    <div class="p-3 bg-light rounded border text-xs">
+                        <span class="font-weight-bold d-block mb-1 text-dark">Wajib gunakan nama kolom header ini di baris ke-1 Excel:</span>
+                        <code class="text-primary font-weight-bold">nama_siswa</code>, 
+                        <code class="text-dark">nomor_punggung</code>, 
+                        <code class="text-dark">posisi_bermain</code>, 
+                        <code class="text-primary font-weight-bold">tanggal_lahir</code> (YYYY-MM-DD), 
+                        <code class="text-primary font-weight-bold">nomor_wa_ortu</code>, 
+                        <code class="text-dark">nomor_wa_siswa</code>, 
+                        <code class="text-dark">alamat</code>, 
+                        <code class="text-dark">nama_orang_tua</code>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning font-weight-bold text-dark btn-sm px-4"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Mulai Impor Data Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection

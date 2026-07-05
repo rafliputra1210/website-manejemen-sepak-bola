@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Coach;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\CoachesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CoachesImport;
 
 class CoachController extends Controller
 {
@@ -78,5 +81,20 @@ class CoachController extends Controller
         Coach::destroy($coach->id);
 
         return redirect()->route('admin.coaches.index')->with('success', 'Data Coach berhasil dihapus!');
+    }
+    public function exportExcel()
+    {
+        $namaFile = 'Data_Coach_Superseed_Academy_' . date('Y-m-d_H-i') . '.xlsx';
+        return Excel::download(new CoachesExport, $namaFile);
+    }
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        Excel::import(new CoachesImport, $request->file('file_excel'));
+
+        return redirect()->back()->with('success', 'Data Coach & Pelatih berhasil diimpor dari file Excel!');
     }
 }

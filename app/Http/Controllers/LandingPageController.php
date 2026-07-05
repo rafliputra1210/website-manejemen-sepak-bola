@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Models\Announcement;
 use App\Models\Athlete;
 use App\Models\Schedule;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
 class LandingPageController extends Controller
@@ -18,8 +19,9 @@ class LandingPageController extends Controller
         $totalAthlete = Athlete::count('*');
         $totalCoach = Coach::count('*');
         $announcements = Announcement::where('is_active', '=', true, 'and')->latest('created_at')->take(3)->get();
+        $banners = Banner::where('is_active', true)->orderBy('urutan')->take(5)->get();
         
-        return view('landing.home', compact('totalAthlete', 'totalCoach', 'announcements'));
+        return view('landing.home', compact('totalAthlete', 'totalCoach', 'announcements', 'banners'));
     }
 
     // 2. Profil Coach - Menampilkan seluruh coach dari database

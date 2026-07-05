@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Exports\AthletesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AthletesImport;
 
 class AthleteController extends Controller
 {
@@ -106,5 +109,20 @@ class AthleteController extends Controller
     {
         $athlete->delete();
         return redirect()->route('admin.athletes.index')->with('success', 'Data Atlet berhasil dihapus!');
+    }
+    public function exportExcel()
+    {
+        $namaFile = 'Data_Atlet_Superseed_Academy_' . date('Y-m-d_H-i') . '.xlsx';
+        return Excel::download(new AthletesExport, $namaFile);
+    }
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        Excel::import(new AthletesImport, $request->file('file_excel'));
+
+        return redirect()->back()->with('success', 'Ratusan Data Siswa berhasil diimpor & Akun Wali mereka otomatis aktif!');
     }
 }

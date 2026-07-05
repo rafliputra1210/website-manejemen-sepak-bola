@@ -3,15 +3,65 @@
 
 @section('content')
 <div class="card card-custom bg-white p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <div>
             <h5 class="mb-1 font-weight-bold">Daftar Coach Superseed Academy</h5>
             <p class="text-muted small mb-0">Kelola status lisensi, referensi kepelatihan, dan nomor kontak pelatih.</p>
         </div>
-        <a href="{{ route('admin.coaches.create') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Coach Baru
-        </a>
+        
+        <!-- Kelompok Tombol Aksi -->
+        <div class="d-flex gap-2">
+            <!-- TOMBOL EKSPOR EXCEL -->
+            <a href="{{ route('admin.coaches.export') }}" class="btn btn-success btn-sm font-weight-bold d-flex align-items-center gap-1 shadow-sm">
+                <i class="bi bi-file-earmark-excel-fill fs-6"></i> Ekspor Excel (.xlsx)
+            </a>
+
+            <!-- TOMBOL IMPOR EXCEL -->
+            <button type="button" class="btn btn-warning btn-sm font-weight-bold text-dark d-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportCoach">
+                <i class="bi bi-file-earmark-arrow-up-fill fs-6"></i> Upload / Impor Excel
+            </button>
+
+            <!-- TOMBOL TAMBAH DATA -->
+            <a href="{{ route('admin.coaches.create') }}" class="btn btn-primary btn-sm font-weight-bold d-flex align-items-center gap-1 shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Tambah Coach Baru
+            </a>
+        </div>
     </div>
+
+<!-- MODAL POPUP UPLOAD EXCEL COACH (Taruh di paling bawah sebelum endsection) -->
+<div class="modal fade" id="modalImportCoach" tabindex="-1" aria-labelledby="modalImportCoachLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title font-weight-bold" id="modalImportCoachLabel"><i class="bi bi-cloud-upload-fill me-2"></i>Upload File Excel Coach</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.coaches.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Pilih File Excel dari Komputer <span class="text-danger">*</span></label>
+                        <input type="file" name="file_excel" class="form-control" accept=".xlsx, .xls, .csv" required>
+                    </div>
+
+                    <div class="p-3 bg-light rounded border text-xs">
+                        <span class="font-weight-bold d-block mb-1 text-dark">Wajib gunakan nama kolom header ini di baris ke-1 Excel:</span>
+                        <code class="text-primary font-weight-bold">nama_coach</code>, 
+                        <code class="text-dark">status_lisensi</code> (berlisensi/tidak_berlisensi), 
+                        <code class="text-dark">detail_lisensi</code>, 
+                        <code class="text-dark">nomor_wa</code>, 
+                        <code class="text-dark">referensi_pengalaman</code>, 
+                        <code class="text-dark">alamat</code>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning font-weight-bold text-dark btn-sm px-4"><i class="bi bi-cloud-arrow-up-fill me-1"></i> Impor Data Coach</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <div class="table-responsive">
         <table class="table table-hover align-middle border">

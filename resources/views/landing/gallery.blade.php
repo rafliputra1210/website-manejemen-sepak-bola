@@ -1,43 +1,40 @@
 @extends('layouts.landing')
-
-@section('title', 'Galeri Kegiatan & Latihan')
+@section('title', 'Galeri Kegiatan | Superseed Academy')
 
 @section('content')
-<div class="bg-emerald-900 text-white py-12 px-4 text-center">
-    <h1 class="text-3xl md:text-4xl font-bold uppercase tracking-wide">Galeri Dokumentasi</h1>
-    <p class="text-emerald-200 mt-2">Arsip momen latihan rutin, kegiatan akademi, dan kebersamaan di lapangan</p>
-</div>
+<section class="py-20 bg-slate-50 border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
+        <h1 class="text-3xl md:text-5xl font-black text-brand-navy mb-4 tracking-tight">Galeri Kegiatan</h1>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+            Momen-momen berharga dalam setiap sesi latihan dan turnamen yang terekam kamera.
+        </p>
+    </div>
+</section>
 
-<div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @forelse($galleries as $item)
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 group flex flex-col justify-between">
-            <div class="h-56 bg-gray-200 overflow-hidden relative">
-                <img src="{{ asset('storage/' . $item->foto_bukti) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" alt="Dokumentasi">
-                <div class="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            @forelse($galleries as $gallery)
+            <div class="group relative aspect-square overflow-hidden rounded-xl bg-slate-100 fade-in border border-slate-200">
+                <img src="{{ asset('storage/' . $gallery->foto_bukti) }}" alt="Kegiatan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-brand-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                    <span class="text-white font-bold text-sm">{{ $gallery->athlete->nama ?? 'Siswa' }}</span>
+                    <span class="text-brand-light text-xs">{{ $gallery->tanggal ?? $gallery->created_at->format('d M Y') }}</span>
                 </div>
             </div>
-            <div class="p-4 bg-white">
-                <p class="font-bold text-sm text-gray-800 line-clamp-1">
-                    Kegiatan Latihan: {{ $item->athlete->nama ?? 'Skuad Superseed' }}
-                </p>
-                <p class="text-xs text-emerald-700 font-semibold mt-1">
-                    ⚽ Status: {{ ucfirst($item->status) }} | <span class="text-gray-400">{{ $item->kode_barcode }}</span>
-                </p>
+            @empty
+            <div class="col-span-full text-center py-16 bg-slate-50 rounded-xl border border-slate-100">
+                <i class="bi bi-images text-4xl text-slate-300 mb-3"></i>
+                <p class="text-slate-500">Galeri foto belum tersedia.</p>
             </div>
+            @endforelse
         </div>
-        @empty
-        <div class="col-span-4 text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
-            <div class="text-4xl mb-2">📸</div>
-            <p class="text-gray-500 font-medium">Belum ada foto dokumentasi yang diunggah oleh Admin.</p>
-            <p class="text-xs text-gray-400 mt-1">Foto bukti kegiatan pada sistem absensi admin akan otomatis muncul di sini.</p>
+        
+        @if(isset($galleries) && $galleries->hasPages())
+        <div class="mt-12 flex justify-center">
+            {{ $galleries->links('pagination::tailwind') }}
         </div>
-        @endforelse
+        @endif
     </div>
-
-    <div class="mt-8">
-        {{ $galleries->links() }}
-    </div>
-</div>
+</section>
 @endsection

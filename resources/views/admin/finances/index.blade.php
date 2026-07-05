@@ -48,35 +48,42 @@
             </thead>
             <tbody>
                 @forelse($finances as $item)
-                <tr>
-                    <td class="small text-nowrap"><i class="bi bi-calendar3 text-muted me-1"></i> {{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
-                    <td>
-                        <strong class="text-dark d-block">{{ $item->kategori }}</strong>
-                        <span class="text-muted small">{{ $item->keterangan ?: '-' }}</span>
-                    </td>
-                    <td class="text-center">
-                        @if($item->jenis == 'pemasukan')
-                            <span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-arrow-down-left me-1"></i>Pemasukan</span>
-                        @else
-                            <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-arrow-up-right me-1"></i>Pengeluaran</span>
-                        @endif
-                    </td>
-                    <td class="text-end font-weight-bold text-nowrap {{ $item->jenis == 'pemasukan' ? 'text-success' : 'text-danger' }}">
-                        {{ $item->jenis == 'pemasukan' ? '+' : '-' }} Rp {{ number_format($item->nominal, 0, ',', '.') }}
-                    </td>
-                    <td class="text-end font-weight-bold text-dark bg-light text-nowrap">
-                        Rp {{ number_format($item->saldo_akhir, 0, ',', '.') }}
-                    </td>
-                    <td class="text-center">
-                        <form action="{{ route('admin.finances.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus riwayat transaksi ini?');">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr><td colspan="6" class="text-center py-5 text-muted">Belum ada transaksi kas yang dicatat.</td></tr>
-                @endforelse
+<tr>
+    <td class="small text-nowrap"><i class="bi bi-calendar3 text-muted me-1"></i> {{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+    <td>
+        <strong class="text-dark d-block">{{ $item->kategori }}</strong>
+        
+        @if($item->athlete)
+            <div class="mt-1 d-inline-flex align-items-center gap-1 bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-0.5 rounded text-xs font-weight-bold">
+                <i class="bi bi-person-fill"></i> {{ $item->athlete->nama }} (Bulan: {{ $item->bulan_tagihan }})
+            </div>
+        @endif
+        
+        <span class="text-muted small d-block mt-0.5">{{ $item->keterangan ?: '-' }}</span>
+    </td>
+    <td class="text-center">
+        @if($item->jenis == 'pemasukan')
+            <span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-arrow-down-left me-1"></i>Pemasukan</span>
+        @else
+            <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-arrow-up-right me-1"></i>Pengeluaran</span>
+        @endif
+    </td>
+    <td class="text-end font-weight-bold text-nowrap {{ $item->jenis == 'pemasukan' ? 'text-success' : 'text-danger' }}">
+        {{ $item->jenis == 'pemasukan' ? '+' : '-' }} Rp {{ number_format($item->nominal, 0, ',', '.') }}
+    </td>
+    <td class="text-end font-weight-bold text-dark bg-light text-nowrap">
+        Rp {{ number_format($item->saldo_akhir, 0, ',', '.') }}
+    </td>
+    <td class="text-center">
+        <form action="{{ route('admin.finances.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus riwayat transaksi ini?');">
+            @csrf @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+        </form>
+    </td>
+</tr>
+@empty
+<tr><td colspan="6" class="text-center py-5 text-muted">Belum ada transaksi kas yang dicatat.</td></tr>
+@endforelse
             </tbody>
         </table>
     </div>

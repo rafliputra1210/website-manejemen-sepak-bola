@@ -6,26 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
-{
-    Schema::create('finances', function (Blueprint $table) {
-        $table->id();
-        $table->date('tanggal');
-        $table->enum('jenis', ['pemasukan', 'pengeluaran']);
-        $table->string('kategori'); // Uang Kas, Donasi, Beli Alat, Sewa Lapangan
-        $table->string('keterangan');
-        $table->decimal('nominal', 15, 2);
-        $table->decimal('saldo_akhir', 15, 2)->default(0); // Tracking saldo akhir otomatis
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('finances', function (Blueprint $table) {
+            $table->id();
+            // Relasi ke siswa (Opsional, diisi jika kategorinya iuran siswa)
+            $table->foreignId('athlete_id')->nullable()->constrained('athletes')->nullOnDelete();
+            $table->string('bulan_tagihan', 50)->nullable(); // Contoh: "Juli 2026"
+            $table->date('tanggal');
+            $table->enum('jenis', ['pemasukan', 'pengeluaran']);
+            $table->string('kategori'); // Iuran Uang Kas Bulanan, Sewa Lapangan, dll.
+            $table->string('keterangan')->nullable();
+            $table->decimal('nominal', 15, 2);
+            $table->decimal('saldo_akhir', 15, 2)->default(0);
+            $table->timestamps();
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('finances');

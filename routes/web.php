@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Wali\WaliPortalController;
 use App\Http\Controllers\Admin\WaliManagerController;
+use App\Http\Controllers\Admin\BannerController;
+
 
 // Rute Modul Landing Page (Publik)
 Route::controller(LandingPageController::class)->group(function () {
@@ -24,6 +26,7 @@ Route::controller(LandingPageController::class)->group(function () {
 });
 // --- RUTE AUTENTIKASI ---
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+// Rute autentikasi lainnya...
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -32,6 +35,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+
+    // --- RUTE EKSPOR EXCEL (Wajib ditaruh di atas resource) ---
+    Route::get('/athletes/export/excel', [AthleteController::class, 'exportExcel'])->name('athletes.export');
+    Route::get('/coaches/export/excel', [CoachController::class, 'exportExcel'])->name('coaches.export');
 
     // Route CRUD Data Atlet (Murid)
     Route::resource('/athletes', AthleteController::class);
@@ -52,6 +59,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/manajemen-akun-wali', [WaliManagerController::class, 'index'])->name('wali.index');
     Route::post('/manajemen-akun-wali/generate/{athlete}', [WaliManagerController::class, 'generate'])->name('wali.generate');
     Route::post('/manajemen-akun-wali/reset/{user}', [WaliManagerController::class, 'resetPassword'])->name('wali.reset');
+
+    // Rute Pengaturan Banner
+    Route::resource('/banners', BannerController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::post('/banners/{id}/toggle', [BannerController::class, 'toggleActive'])->name('banners.toggle');
 });
 
 // --- RUTE MODUL 4: PORTAL WALI MURID (Frontend User) ---
@@ -61,4 +72,18 @@ Route::middleware(['auth', 'role:wali_murid'])->prefix('portal-wali')->name('wal
     Route::get('/raport', [WaliPortalController::class, 'raport'])->name('raport');
     Route::get('/keuangan', [WaliPortalController::class, 'keuangan'])->name('keuangan');
     Route::get('/pengumuman', [WaliPortalController::class, 'pengumuman'])->name('pengumuman');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // --- RUTE EKSPOR & IMPOR EXCEL ---
+    Route::get('/athletes/export/excel', [AthleteController::class, 'exportExcel'])->name('athletes.export');
+    Route::post('/athletes/import/excel', [AthleteController::class, 'importExcel'])->name('athletes.import'); // <-- Rute Upload Siswa
+    
+    Route::get('/coaches/export/excel', [CoachController::class, 'exportExcel'])->name('coaches.export');
+    Route::post('/coaches/import/excel', [CoachController::class, 'importExcel'])->name('coaches.import'); // <-- Rute Upload Coach
+
+    // --- RUTE RESOURCE CRUD ---
+    Route::resource('/athletes', AthleteController::class);
+    Route::resource('/coaches', CoachController::class);
 });

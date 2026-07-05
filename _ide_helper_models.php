@@ -49,6 +49,7 @@ namespace App\Models{
  * @property string|null $foto
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete query()
@@ -78,6 +79,7 @@ namespace App\Models{
  * @property string|null $foto_bukti
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Athlete $athlete
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attendance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attendance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attendance query()
@@ -125,17 +127,22 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property int|null $athlete_id
+ * @property string|null $bulan_tagihan
  * @property string $tanggal
  * @property string $jenis
  * @property string $kategori
- * @property string $keterangan
+ * @property string|null $keterangan
  * @property numeric $nominal
  * @property numeric $saldo_akhir
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Athlete|null $athlete
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance whereAthleteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance whereBulanTagihan($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Finance whereJenis($value)
@@ -154,12 +161,13 @@ namespace App\Models{
  * @property int $id
  * @property int $athlete_id
  * @property string $periode
- * @property string|null $daftar_nilai
+ * @property array<array-key, mixed>|null $daftar_nilai
  * @property string|null $progres_skill
  * @property string|null $prestasi
  * @property string|null $catatan_pelatih
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Athlete $athlete
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Report newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Report query()
@@ -179,6 +187,32 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property string $kelompok_usia
+ * @property string $hari
+ * @property string $waktu
+ * @property string $lokasi
+ * @property int|null $coach_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Coach|null $coach
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereCoachId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereHari($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereKelompokUsia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereLokasi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Schedule whereWaktu($value)
+ */
+	class Schedule extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
  * @property string $name
  * @property string $username
  * @property string $password
@@ -186,6 +220,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Athlete> $athletes
+ * @property-read int|null $athletes_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
